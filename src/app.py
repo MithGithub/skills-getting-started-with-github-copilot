@@ -74,6 +74,78 @@ activities = {
         "schedule": "Tuesdays and Thursdays, 5:00 PM - 6:30 PM",
         "max_participants": 15,
         "participants": ["lucas@mergington.edu"]
+    },
+    "Volleyball Club": {
+        "description": "Indoor volleyball practice and friendly matches",
+        "schedule": "Wednesdays and Fridays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["harper@mergington.edu", "eli@mergington.edu"]
+    },
+    "Swimming Team": {
+        "description": "Lap training and swim meets for competitive swimmers",
+        "schedule": "Mondays and Thursdays, 5:00 PM - 6:30 PM",
+        "max_participants": 20,
+        "participants": ["mason@mergington.edu", "ava@mergington.edu"]
+    },
+    "Creative Writing Club": {
+        "description": "Write stories, poems, and essays with peer feedback",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 16,
+        "participants": ["ella@mergington.edu", "noah@mergington.edu"]
+    },
+    "Photography Club": {
+        "description": "Explore photography techniques and create visual stories",
+        "schedule": "Saturdays, 10:00 AM - 12:00 PM",
+        "max_participants": 14,
+        "participants": ["clara@mergington.edu"]
+    },
+    "Robotics Team": {
+        "description": "Build robots and solve engineering challenges",
+        "schedule": "Wednesdays and Saturdays, 4:30 PM - 6:30 PM",
+        "max_participants": 15,
+        "participants": ["ben@mergington.edu", "mia@mergington.edu"]
+    },
+    "History Scholars": {
+        "description": "Study history through debates, research, and presentations",
+        "schedule": "Mondays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["olivia@mergington.edu", "ethan@mergington.edu"]
+    },
+    "Track and Field": {
+        "description": "Run, jump, and throw in track and field training sessions",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["jack@mergington.edu", "ava@mergington.edu"]
+    },
+    "Yoga Club": {
+        "description": "Flexibility and mindfulness through yoga practice",
+        "schedule": "Wednesdays, 5:00 PM - 6:00 PM",
+        "max_participants": 18,
+        "participants": ["emma@mergington.edu"]
+    },
+    "Music Ensemble": {
+        "description": "Practice instruments together and prepare concerts",
+        "schedule": "Mondays and Wednesdays, 5:00 PM - 6:30 PM",
+        "max_participants": 20,
+        "participants": ["liam@mergington.edu", "isabella@mergington.edu"]
+    },
+    "Ceramics Workshop": {
+        "description": "Hand-building pottery and glazing ceramics",
+        "schedule": "Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 14,
+        "participants": ["olivia@mergington.edu"]
+    },
+    "Astronomy Society": {
+        "description": "Observe the night sky and learn about stars and planets",
+        "schedule": "Thursdays, 7:00 PM - 8:30 PM",
+        "max_participants": 16,
+        "participants": ["noah@mergington.edu"]
+    },
+    "Environmental Research": {
+        "description": "Investigate local ecosystems and conservation science",
+        "schedule": "Wednesdays, 4:30 PM - 6:00 PM",
+        "max_participants": 18,
+        "participants": ["sophia@mergington.edu", "mason@mergington.edu"]
     }
 }
 
@@ -109,3 +181,17 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+@app.delete("/activities/{activity_name}/participants")
+def unregister_from_activity(activity_name: str, email: str):
+    """Unregister a student from an activity"""
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    activity = activities[activity_name]
+    if email not in activity["participants"]:
+        raise HTTPException(status_code=404, detail="Participant not found")
+
+    activity["participants"].remove(email)
+    return {"message": f"Unregistered {email} from {activity_name}"}
